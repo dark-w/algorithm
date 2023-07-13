@@ -23,14 +23,15 @@ static bool are_vector_equal(const std::vector<int>& vec1, const std::vector<int
 TEST(TestInsertSort, BasicAssertions) {
     std::random_device rd;  // 用于获取真随机数种子
     std::mt19937 gen(rd()); // 使用Mersenne Twister引擎作为随机数生成器
-    std::uniform_int_distribution<int> dist(1, 100); // 生成1到100之间的整数
+    std::uniform_int_distribution<int> rgtor_number(INT32_MIN, INT32_MAX);
+    std::uniform_int_distribution<int> rgtor_cnt(0, INT16_MAX);
 
     for (int i = 0; i < 1000; i++) {
         std::vector<int> randomNumbers;
         
         // 生成随机数并添加到vector中
-        for (int i = 0; i < 10; ++i) {
-            int randomNumber = dist(gen);
+        for (int i = 0; i < rgtor_cnt(gen); ++i) {
+            int randomNumber = rgtor_number(gen);
             randomNumbers.push_back(randomNumber);
         }
 
