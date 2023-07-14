@@ -24,9 +24,9 @@ add_executable(
 )
 
 add_executable(
-  main
-  main.cc
-  src/insert_sort.cc
+  test_merge_sort
+  test/test_merge_sort.cc
+  src/merge_sort.cc
 )
 
 target_link_libraries(
@@ -34,5 +34,11 @@ target_link_libraries(
   GTest::gtest_main
 )
 
+target_link_libraries(
+  test_merge_sort
+  GTest::gtest_main
+)
+
 include(GoogleTest)
 gtest_discover_tests(test_insert_sort)
+gtest_discover_tests(test_merge_sort)

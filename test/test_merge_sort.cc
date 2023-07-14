@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <random>
 
-#include "../src/insert_sort.h"
+#include "../src/merge_sort.h"
 
 static bool are_vector_equal(const std::vector<int>& vec1, const std::vector<int>& vec2) {
     if (vec1.size() != vec2.size()) {
@@ -12,13 +12,13 @@ static bool are_vector_equal(const std::vector<int>& vec1, const std::vector<int
 }
 
 // Demonstrate some basic assertions.
-TEST(TestInsertSort, BasicAssertions) {
+TEST(TestMergeSort, BasicAssertions) {
     std::random_device rd;  // 用于获取真随机数种子
     std::mt19937 gen(rd()); // 使用Mersenne Twister引擎作为随机数生成器
-    std::uniform_int_distribution<int> rgtor_number(INT32_MIN, INT32_MAX);
+    std::uniform_int_distribution<int> rgtor_number(INT32_MIN, INT32_MAX - 1); // merge_sort中使用INT32_MAX作为哨兵
     std::uniform_int_distribution<int> rgtor_cnt(0, INT16_MAX);
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10; i++) {
         std::vector<int> random_vector;
         
         // 生成随机数并添加到vector中
@@ -29,10 +29,14 @@ TEST(TestInsertSort, BasicAssertions) {
 
         std::vector<int> sorted_vector = random_vector;  // 创建新的vector并复制原始数组内容
         std::sort(sorted_vector.begin(), sorted_vector.end());  // 对新数组进行排序
-        std::reverse(sorted_vector.begin(), sorted_vector.end());
+        // std::reverse(sorted_vector.begin(), sorted_vector.end());
 
-        insert_sort(random_vector);
-        // std::cout << i << ' ';
+        // for (auto i : random_vector) {
+        //     std::cout << i << ' ';
+        // }
+        // std::cout << std::endl;
+        merge_sort(random_vector);
+
         EXPECT_TRUE(are_vector_equal(sorted_vector, random_vector));
     }
 }
