@@ -29,6 +29,13 @@ add_executable(
   src/merge_sort.cc
 )
 
+add_executable(
+  test_find_max_subarray
+  test/test_find_max_subarray.cc
+  src/find_max_subarray.cc
+)
+
+
 target_link_libraries(
   test_insert_sort
   GTest::gtest_main
@@ -39,6 +46,12 @@ target_link_libraries(
   GTest::gtest_main
 )
 
+target_link_libraries(
+  test_find_max_subarray
+  GTest::gtest_main
+)
+
 include(GoogleTest)
 gtest_discover_tests(test_insert_sort)
 gtest_discover_tests(test_merge_sort)
+gtest_discover_tests(test_find_max_subarray)

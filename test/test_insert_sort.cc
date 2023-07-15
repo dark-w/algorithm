@@ -16,7 +16,7 @@ TEST(TestInsertSort, BasicAssertions) {
     std::random_device rd;  // 用于获取真随机数种子
     std::mt19937 gen(rd()); // 使用Mersenne Twister引擎作为随机数生成器
     std::uniform_int_distribution<int> rgtor_number(INT32_MIN, INT32_MAX);
-    std::uniform_int_distribution<int> rgtor_cnt(0, INT16_MAX);
+    std::uniform_int_distribution<int> rgtor_cnt(0, INT32_MAX);
 
     for (int i = 0; i < 1000; i++) {
         std::vector<int> random_vector;
@@ -32,7 +32,7 @@ TEST(TestInsertSort, BasicAssertions) {
         std::reverse(sorted_vector.begin(), sorted_vector.end());
 
         insert_sort(random_vector);
-        // std::cout << i << ' ';
+        std::cout << i << ' ';
         EXPECT_TRUE(are_vector_equal(sorted_vector, random_vector));
     }
 }
