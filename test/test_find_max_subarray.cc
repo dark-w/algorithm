@@ -30,13 +30,15 @@ static find_max_subarray_result test_find_max_subarray(const std::vector<int>& n
 const static std::vector<std::vector<int>> test_data = {
     {1, 2, 3, 0, -1, -2, -3},
     {-1, -3, 2, 3, 4, -2, -3},
-    {-1, -2, -3, 0, 1, 2, 3}
+    {-1, -2, -3, 0, 1, 2, 3},
+    {0, 0, 0, 0, 0, 0, 0, 0}
 };
 
 const static std::vector<find_max_subarray_result> test_results = {
     find_max_subarray_result(0, 2, 6),
     find_max_subarray_result(2, 4, 9),
     find_max_subarray_result(4, 6, 6),
+    find_max_subarray_result(0, 0, 0),
 };
 
 // Demonstrate some basic assertions.

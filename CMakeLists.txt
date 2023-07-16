@@ -14,6 +14,9 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# 设置 Eigen3 的路径
+include_directories(./lib/eigen-3.4.0)
+
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include)
 
@@ -35,6 +38,11 @@ add_executable(
   src/find_max_subarray.cc
 )
 
+add_executable(
+  test_matrix
+  test/test_matrix.cc
+  src/matrix.cc
+)
 
 target_link_libraries(
   test_insert_sort
@@ -51,7 +59,13 @@ target_link_libraries(
   GTest::gtest_main
 )
 
+target_link_libraries(
+  test_matrix
+  GTest::gtest_main
+)
+
 include(GoogleTest)
 gtest_discover_tests(test_insert_sort)
 gtest_discover_tests(test_merge_sort)
 gtest_discover_tests(test_find_max_subarray)
+gtest_discover_tests(test_matrix)
