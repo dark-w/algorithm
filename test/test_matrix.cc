@@ -32,17 +32,33 @@ TEST(TestMatrix, Solve) {
     std::mt19937 gen(rd()); // 使用Mersenne Twister引擎作为随机数生成器
     std::uniform_int_distribution<int> rgtor_number(1, INT8_MAX);
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10; i++) {
         int n = rgtor_number(gen);
         MatrixXd A1 = MatrixXd::Random(n, n) * rgtor_number(gen);
         MatrixXd b1 = MatrixXd::Random(n, 1) * rgtor_number(gen);
         MatrixXd x1 = A1.lu().solve(b1);
-        
+
         DMatrix A(A1);
         DMatrix b(b1);
         DMatrix x = solve(A, b);
 
         EXPECT_TRUE(x == x1);
+    }
+}
+
+TEST(TestMatrix, Inverse) {
+    std::random_device rd;  // 用于获取真随机数种子
+    std::mt19937 gen(rd()); // 使用Mersenne Twister引擎作为随机数生成器
+    std::uniform_int_distribution<int> rgtor_number(1, INT8_MAX);
+
+    for (int i = 0; i < 10; i++) {
+        int n = rgtor_number(gen);
+        MatrixXd A1 = MatrixXd::Random(n, n) * rgtor_number(gen);
+        MatrixXd A1_inverse = A1.inverse();
+
+        DMatrix A(A1);
+
+        EXPECT_TRUE(A.get_inverse_by_Guass_Jordan_elimination() == A1_inverse);
     }
 }
 

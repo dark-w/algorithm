@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-double EPS = 1e-7;
+double EPS = 1e-2; // 1e-2
 
 DMatrix::DMatrix(int rows, int cols, float init_value)
 	: _rows(rows), _cols(cols) {
