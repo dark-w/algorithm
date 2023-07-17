@@ -44,6 +44,13 @@ add_executable(
   src/matrix.cc
 )
 
+add_executable(
+  test_fib
+  test/test_fib.cc
+  src/fib.cc
+  src/matrix.cc
+)
+
 target_link_libraries(
   test_insert_sort
   GTest::gtest_main
@@ -64,8 +71,14 @@ target_link_libraries(
   GTest::gtest_main
 )
 
+target_link_libraries(
+  test_fib
+  GTest::gtest_main
+)
+
 include(GoogleTest)
 gtest_discover_tests(test_insert_sort)
 gtest_discover_tests(test_merge_sort)
 gtest_discover_tests(test_find_max_subarray)
 gtest_discover_tests(test_matrix)
+gtest_discover_tests(test_fib)
