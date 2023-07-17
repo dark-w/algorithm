@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-double EPS = 1e-9;
+double EPS = 1e-7;
 
 DMatrix::DMatrix(int rows, int cols, float init_value)
 	: _rows(rows), _cols(cols) {
@@ -149,7 +149,7 @@ DMatrix solve(const DMatrix& A, const DMatrix& b) {
 
 		for (int j = i + 1; j < U._rows; j++) {
 			double ec = U(j, i) / U(i, i);
-			std::cout << "ec: " << ec << std::endl;
+			// std::cout << "ec: " << ec << std::endl;
 			for (int k = i + 1; k < U._cols; k++) {
 				U(j, k) = U(j, k) - ec * U(i, k);
 			}
