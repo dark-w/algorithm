@@ -62,3 +62,18 @@ TEST(TestMatrix, Inverse) {
     }
 }
 
+// FIXME: This test function is not finished.
+TEST(TestMatrix, LU) {
+    std::random_device rd;  // 用于获取真随机数种子
+    std::mt19937 gen(rd()); // 使用Mersenne Twister引擎作为随机数生成器
+    std::uniform_int_distribution<int> rgtor_number(1, INT8_MAX);
+
+    for (int i = 0; i < 1; i++) {
+        int n = rgtor_number(gen);
+        MatrixXd A1 = MatrixXd::Random(3, 3) * rgtor_number(gen);
+        MatrixXd A1_lu = A1.lu().matrixLU();
+        std::cout << A1_lu << std::endl;
+        std::cout << DMatrix(A1).get_LU().first;
+        std::cout << DMatrix(A1).get_LU().second;
+    }
+}
