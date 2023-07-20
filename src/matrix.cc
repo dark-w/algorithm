@@ -326,3 +326,22 @@ bool operator==(const DMatrix& lhs, const Eigen::MatrixXd& rhs) {
         }
     }
 }
+
+bool operator==(const DMatrix& lhs, const DMatrix& rhs) {
+    if (lhs._rows != rhs._rows || lhs._cols != rhs._cols) {
+        std::cout << "lhs._rows: " << lhs._rows << " lhs._cols: " << lhs._cols
+            << std::endl << "rhs.rows(): " << rhs._rows << " rhs.cols()" 
+            << rhs._cols << std::endl;
+        return false;
+    }
+
+    for (int i = 0; i < lhs._rows; i++) {
+        for (int j = 0; j < lhs._cols; j++) {
+            if (fabs(lhs(i, j) - rhs(i, j)) > EPS) {
+                std::cout << "lhs(i, j): " << lhs(i, j) << " rhs(i, j): " << rhs(i, j)
+                    << " err: " << fabs(lhs(i, j) - rhs(i, j)) << std::endl;
+                return false;
+            }
+        }
+    }
+}

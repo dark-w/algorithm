@@ -36,6 +36,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const DMatrix& m);
 	friend DMatrix solve(const DMatrix& A, const DMatrix& X);
     friend bool operator==(const DMatrix&, const Eigen::MatrixXd&);
+    friend bool operator==(const DMatrix&, const DMatrix&);
 
 	~DMatrix() {
 		for (int i = 0; i < _rows; i++)
@@ -53,6 +54,7 @@ private:
 std::ostream& operator<<(std::ostream& out, const DMatrix& m);
 DMatrix operator*(const DMatrix&, const DMatrix&);
 bool operator==(const DMatrix&, const Eigen::MatrixXd&);
+bool operator==(const DMatrix&, const DMatrix&);
 
 DMatrix solve(const DMatrix& A, const DMatrix& X);
 
