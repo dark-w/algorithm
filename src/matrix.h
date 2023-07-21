@@ -37,7 +37,13 @@ public:
 	friend DMatrix solve(const DMatrix& A, const DMatrix& X);
     friend bool operator==(const DMatrix&, const Eigen::MatrixXd&);
     friend bool operator==(const DMatrix&, const DMatrix&);
-
+	friend DMatrix operator*(double, const DMatrix&);
+	friend DMatrix operator*(const DMatrix&, double);
+	friend DMatrix operator+(double scale, const DMatrix& rhs);
+	friend DMatrix operator+(const DMatrix& lhs, double scale);
+	friend DMatrix operator+(const DMatrix& lhs, const DMatrix& rhs);
+	friend DMatrix operator-(const DMatrix& lhs, const DMatrix& rhs);
+	
 	~DMatrix() {
 		for (int i = 0; i < _rows; i++)
 			delete[] _data[i];
@@ -55,6 +61,12 @@ std::ostream& operator<<(std::ostream& out, const DMatrix& m);
 DMatrix operator*(const DMatrix&, const DMatrix&);
 bool operator==(const DMatrix&, const Eigen::MatrixXd&);
 bool operator==(const DMatrix&, const DMatrix&);
+DMatrix operator*(double, const DMatrix&);
+DMatrix operator*(const DMatrix&, double);
+DMatrix operator+(double scale, const DMatrix& rhs);
+DMatrix operator+(const DMatrix& lhs, double scale);
+DMatrix operator+(const DMatrix& lhs, const DMatrix& rhs);
+DMatrix operator-(const DMatrix& lhs, const DMatrix& rhs);
 
 DMatrix solve(const DMatrix& A, const DMatrix& X);
 

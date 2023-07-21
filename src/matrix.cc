@@ -325,6 +325,8 @@ bool operator==(const DMatrix& lhs, const Eigen::MatrixXd& rhs) {
             }
         }
     }
+
+	return true;
 }
 
 bool operator==(const DMatrix& lhs, const DMatrix& rhs) {
@@ -344,4 +346,58 @@ bool operator==(const DMatrix& lhs, const DMatrix& rhs) {
             }
         }
     }
+
+	return true;
+}
+
+DMatrix operator*(double scale, const DMatrix& rhs) {
+	DMatrix r = rhs;
+	for (int i = 0; i < r.get_rows(); i++) {
+		for (int j = 0; j < r.get_cols(); j++) {
+			r(i, j) *= scale;
+		}
+	}
+
+	return r;
+}
+
+DMatrix operator*(const DMatrix& lhs, double scale) {
+	return scale * lhs;
+}
+
+DMatrix operator+(double scale, const DMatrix& rhs) {
+	DMatrix r = rhs;
+	for (int i = 0; i < r.get_rows(); i++) {
+		for (int j = 0; j < r.get_cols(); j++) {
+			r(i, j) += scale;
+		}
+	}
+
+	return r;
+}
+
+DMatrix operator+(const DMatrix& lhs, double scale) {
+	return scale + lhs;
+}
+
+DMatrix operator+(const DMatrix& lhs, const DMatrix& rhs) {
+	DMatrix r = lhs;
+	for (int i = 0; i < lhs.get_rows(); i++) {
+		for (int j = 0; j < lhs.get_cols(); j++) {
+			r(i, j) += rhs(i, j);
+		}
+	}
+
+	return r;
+}
+
+DMatrix operator-(const DMatrix& lhs, const DMatrix& rhs) {
+	DMatrix r = lhs;
+	for (int i = 0; i < lhs.get_rows(); i++) {
+		for (int j = 0; j < lhs.get_cols(); j++) {
+			r(i, j) -= rhs(i, j);
+		}
+	}
+
+	return r;
 }
