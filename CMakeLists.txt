@@ -56,6 +56,7 @@ add_executable(
   test/test_fft.cc
   src/fft.cc
   src/matrix.cc
+  src/complex.cc
 )
 
 target_link_libraries(
