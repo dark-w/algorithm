@@ -160,7 +160,7 @@ static std::vector<complex> __recursive_idft(const std::vector<complex>& Y) {
     complex wn;
     wn.set_r_theta(1, (2 * PI) / n);
 
-    // AA(x) = AA_even(x^2) + x * AA_odd(x^2)
+    // YY(x) = YY_even(x^2) + x * YY   
     std::vector<complex> YY_even(n / 2);
     std::vector<complex> YY_odd(n / 2);
     for (int i = 0; i < n; i++) {
@@ -194,7 +194,89 @@ std::vector<complex> recursive_idft(const std::vector<complex>& Y) {
     return retval;
 }
 
-DMatrix polynomial_multiplication_fft(const DMatrix& A, const DMatrix& B) {
+unsigned int bit_reverse_copy_u32(unsigned int i) {
+    i = ((i & 0xaaaaaaaa) >> 1) | ((i & 0x55555555) << 1);
+    i = ((i & 0xcccccccc) >> 2) | ((i & 0x33333333) << 2);
+    i = ((i & 0xf0f0f0f0) >> 4) | ((i & 0x0f0f0f0f) << 4);
+    i = ((i & 0xff00ff00) >> 8) | ((i & 0x00ff00ff) << 8);
+    i = (i >> 16) | (i << 16);
+    return i;
+}
+
+unsigned int bit_reverse_copy_all(unsigned int i, int b) {
+    unsigned int retval = 0x00;
+
+    for (int j = 0; j < b; j++) {
+        retval <<= 1;
+        retval |= (i & 0x01);
+        i >>= 1;
+    }
+
+    return retval;
+}
+
+std::vector<complex> iterative_dft(const std::vector<complex>& A) {
+    // bit reverse copy
+    std::vector<complex> ACOPY = A;
+    int lgn = log2(ACOPY.size());
+    for (size_t i = 0; i < A.size(); i++) {
+        ACOPY[bit_reverse_copy_all(i, lgn)] = A[i];
+    }
+
+    int m = 1; // 2^0
+    for (int s = 0; s < lgn; s++) {
+        m *= 2;
+        complex wn;
+        wn.set_r_theta(1, -2 * PI / m);
+
+        for (int i = 0; i < ACOPY.size(); i += m) {
+            complex w(1, 0);
+            for (int j = 0; j < (m / 2); j++) {
+                complex t = w * ACOPY[i + j + (m / 2)];
+                complex u = ACOPY[i + j];
+                ACOPY[i + j] = u + t;
+                ACOPY[i + j + (m / 2)] = u - t;
+                w = w * wn;
+            }
+        }
+    }
+
+    return ACOPY;
+}
+
+std::vector<complex> iterative_idft(const std::vector<complex>& Y) {
+    // bit reverse copy
+    std::vector<complex> YCOPY = Y;
+    int lgn = log2(YCOPY.size());
+    for (size_t i = 0; i < Y.size(); i++) {
+        YCOPY[bit_reverse_copy_all(i, lgn)] = Y[i];
+    }
+
+    int m = 1; // 2^0
+    for (int s = 0; s < lgn; s++) {
+        m *= 2;
+        complex wn;
+        wn.set_r_theta(1, 2 * PI / m);
+
+        for (int i = 0; i < YCOPY.size(); i += m) {
+            complex w(1, 0);
+            for (int j = 0; j < (m / 2); j++) {
+                complex t = w * YCOPY[i + j + (m / 2)];
+                complex u = YCOPY[i + j];
+                YCOPY[i + j] = u + t;
+                YCOPY[i + j + (m / 2)] = u - t;
+                w = w * wn;
+            }
+        }
+    }
+
+    for (int i = 0; i < YCOPY.size(); i++)
+        YCOPY[i] = YCOPY[i] / Y.size();
+
+    return YCOPY;
+}
+
+DMatrix polynomial_multiplication_fft(const DMatrix& A, const DMatrix& B, fft_alg_type alg_type) {
     int n = A.get_cols() > B.get_cols() ? A.get_cols() * 2 : B.get_cols() * 2;
     n = get_big_pow(n);
 
@@ -209,8 +291,15 @@ DMatrix polynomial_multiplication_fft(const DMatrix& A, const DMatrix& B) {
         vB[i] = B(0, i);
     }
 
-    std::vector<complex> AY = recursive_dft(vA);
-    std::vector<complex> BY = recursive_dft(vB);
+    std::vector<complex> AY, BY;
+
+    if (alg_type == recursive_fft) {
+        AY = recursive_dft(vA);
+        BY = recursive_dft(vB);
+    } else if (alg_type == iterative_fft) {
+        AY = iterative_dft(vA);
+        BY = iterative_dft(vB);
+    }
 
     // std::cout << "AY: " << std::endl;
     // for (auto c : AY) {
@@ -231,7 +320,13 @@ DMatrix polynomial_multiplication_fft(const DMatrix& A, const DMatrix& B) {
         CY[i] = AY[i] * BY[i];
     }
 
-    std::vector<complex> C = recursive_idft(CY);
+    std::vector<complex> C;
+    if (alg_type == recursive_fft) {
+        C = recursive_idft(CY);
+    } else if (alg_type == iterative_fft) {
+        C = iterative_idft(CY);
+    }
+
     DMatrix R(2, n);
     for (int i = 0; i < n; i++) {
         R(0, i) = C[i].get_real();
@@ -240,3 +335,4 @@ DMatrix polynomial_multiplication_fft(const DMatrix& A, const DMatrix& B) {
 
     return R;
 }
+
