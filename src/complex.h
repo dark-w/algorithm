@@ -32,6 +32,14 @@ public:
         return imag;
     }
 
+    void set_real(double r) {
+        real = r;
+    }
+
+    void set_imag(double i) {
+        imag = i;
+    }
+
     double get_r() const {
         return sqrt(real * real + imag * imag);
     }

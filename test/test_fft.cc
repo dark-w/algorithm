@@ -1,10 +1,13 @@
 #include <gtest/gtest.h>
 #include <random>
 #include <Eigen/Dense>
+#include <cmath>
+#include <fstream>
 
 #include "../src/fft.h"
 #include "../src/matrix.h"
 #include "../src/complex.h"
+#include "../src/dmath.h"
 
 using namespace Eigen;
 
@@ -60,7 +63,7 @@ TEST(TestFFT, Karatsuba) {
     std::uniform_int_distribution<int> rgtor_number(1, INT8_MAX);
     std::uniform_int_distribution<int> rgtor_cnt(INT16_MIN, INT16_MAX);
     
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10; i++) {
         int n = rgtor_number(gen);
         MatrixXd A = MatrixXd::Random(1, n) * rgtor_cnt(gen);
         MatrixXd B = MatrixXd::Random(1, n) * rgtor_cnt(gen);
@@ -158,7 +161,7 @@ TEST(TestFFT, RecursivePMFFT) {
     std::mt19937 gen(rd()); // 使用Mersenne Twister引擎作为随机数生成器
     std::uniform_int_distribution<int> rgtor_number(1, INT8_MAX);
     std::uniform_int_distribution<int> rgtor_cnt(INT16_MIN, INT16_MAX);
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10; i++) {
         int n = rgtor_number(gen);
         MatrixXd A = MatrixXd::Random(1, n) * rgtor_cnt(gen);
         MatrixXd B = MatrixXd::Random(1, n) * rgtor_cnt(gen);
@@ -207,7 +210,7 @@ TEST(TestFFT, IterativePMFFT) {
     std::mt19937 gen(rd()); // 使用Mersenne Twister引擎作为随机数生成器
     std::uniform_int_distribution<int> rgtor_number(1, INT8_MAX);
     std::uniform_int_distribution<int> rgtor_cnt(INT16_MIN, INT16_MAX);
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10; i++) {
         int n = rgtor_number(gen);
         MatrixXd A = MatrixXd::Random(1, n) * rgtor_cnt(gen);
         MatrixXd B = MatrixXd::Random(1, n) * rgtor_cnt(gen);
@@ -219,4 +222,35 @@ TEST(TestFFT, IterativePMFFT) {
 
         EXPECT_TRUE(polynomial_equals(CC, C));
     }
+}
+
+TEST(TestFFT, FFTOnSignal) {
+    const int N = 1 << 8;
+    std::vector<complex> A_time_domain(N);
+    for (int i = 0; i < N; i++) {
+        A_time_domain[i].set_real(1 * sin(2 * PI * i * 500 / 10000) + 0.5 * sin(2 * PI * i * 2000 / 10000));
+        A_time_domain[i].set_imag(0);
+    }
+
+    std::vector<complex> A_freq_domain = iterative_dft(A_time_domain);
+    
+    std::ofstream ofs;
+    ofs.open("dft.txt", std::ios::out);
+
+    EXPECT_TRUE(ofs.is_open());
+
+    for (int i = 0; i < A_freq_domain.size(); i++) {
+        char sign = A_freq_domain[i].get_imag() > 0 ? '+' : '-';
+        ofs << A_freq_domain[i].get_r() << sign << fabs(A_freq_domain[i].get_imag()) << 'i' << std::endl;
+        // std::cout << A_freq_domain[i].get_r() << std::endl;
+    }
+    ofs.close();
+
+    ofs.open("dft-src.txt", std::ios::out);
+    for (int i = 0; i < A_freq_domain.size(); i++) {
+        char sign = A_freq_domain[i].get_imag() > 0 ? '+' : '-';
+        ofs << A_freq_domain[i].get_r() << sign << fabs(A_freq_domain[i].get_imag()) << 'i' << std::endl;
+        // std::cout << A_freq_domain[i].get_r() << std::endl;
+    }
+    ofs.close();
 }

@@ -1,5 +1,6 @@
 #include "fft.h"
 #include "complex.h"
+#include "dmath.h"
 
 #include <iostream>
 
@@ -102,8 +103,6 @@ DMatrix polynomial_multiplication_karatsuba(const DMatrix& A, const DMatrix& B) 
 
     return G;
 }
-
-#define PI acos(-1)
 
 std::vector<complex> recursive_dft(const std::vector<complex>& A) {
     int n = A.size();
@@ -220,7 +219,7 @@ std::vector<complex> iterative_dft(const std::vector<complex>& A) {
     std::vector<complex> ACOPY = A;
     int lgn = log2(ACOPY.size());
     for (size_t i = 0; i < A.size(); i++) {
-        ACOPY[bit_reverse_copy_all(i, lgn)] = A[i];
+        ACOPY[bit_reverse_copy_all(i, lgn)] = A[i]; 
     }
 
     int m = 1; // 2^0
