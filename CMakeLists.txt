@@ -65,6 +65,12 @@ add_executable(
   src/quick_sort.cc
 )
 
+add_executable(
+  test_counting_sort
+  test/test_counting_sort.cc
+  src/counting_sort.cc
+)
+
 target_link_libraries(
   test_insert_sort
   GTest::gtest_main
@@ -100,6 +106,11 @@ target_link_libraries(
   GTest::gtest_main
 )
 
+target_link_libraries(
+  test_counting_sort
+  GTest::gtest_main
+)
+
 include(GoogleTest)
 gtest_discover_tests(test_insert_sort)
 gtest_discover_tests(test_merge_sort)
@@ -108,3 +119,4 @@ gtest_discover_tests(test_matrix)
 gtest_discover_tests(test_fib)
 gtest_discover_tests(test_fft)
 gtest_discover_tests(test_quick_sort)
+gtest_discover_tests(test_counting_sort)
