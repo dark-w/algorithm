@@ -5,17 +5,17 @@ project(my_project)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-)
+# include(FetchContent)
+# FetchContent_Declare(
+#   googletest
+#   URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+# )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+# set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+# FetchContent_MakeAvailable(googletest)
 
 # 设置 Eigen3 的路径
-include_directories(./lib/eigen-3.4.0)
+# include_directories(./lib/eigen-3.4.0)
 
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include)
@@ -73,42 +73,58 @@ add_executable(
 
 target_link_libraries(
   test_insert_sort
-  GTest::gtest_main
+  gtest_main
+  gtest
+  pthread
 )
 
 target_link_libraries(
   test_merge_sort
-  GTest::gtest_main
+  gtest_main
+  gtest
+  pthread
 )
 
 target_link_libraries(
   test_find_max_subarray
-  GTest::gtest_main
+  gtest_main
+  gtest
+  pthread
 )
 
 target_link_libraries(
   test_matrix
-  GTest::gtest_main
+  gtest_main
+  gtest
+  pthread
 )
 
 target_link_libraries(
   test_fib
-  GTest::gtest_main
+  gtest_main
+  gtest
+  pthread
 )
 
 target_link_libraries(
   test_fft
-  GTest::gtest_main
+  gtest_main
+  gtest
+  pthread
 )
 
 target_link_libraries(
   test_quick_sort
-  GTest::gtest_main
+  gtest_main
+  gtest
+  pthread
 )
 
 target_link_libraries(
   test_counting_sort
-  GTest::gtest_main
+  gtest_main
+  gtest
+  pthread
 )
 
 include(GoogleTest)

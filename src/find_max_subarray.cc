@@ -1,4 +1,5 @@
 #include "find_max_subarray.h"
+#include <gtest/gtest.h>
 
 static find_max_subarray_result
 __find_max_crossing_subarray(const std::vector<int> v, int p, int q, int r) {

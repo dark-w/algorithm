@@ -1,4 +1,5 @@
 #include "merge_sort.h"
+#include <gtest/gtest.h>
 
 static void __merge(std::vector<int> &v, int p, int q, int r) {
     size_t n1 = q - p + 1;

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <random>
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include <cmath>
 #include <fstream>
 
